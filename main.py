@@ -30,7 +30,7 @@ class MyWin(QtWidgets.QMainWindow):
 
         global pathEditor
         pathEditor = PathEditing(combobox=self.ui.pathComboBox,
-                                 pathfile=path)
+                                 pathsfile=path)
         # Получение путей из path.txt
         pathEditor.set()
         # Инициализация GUI
@@ -44,6 +44,7 @@ class MyWin(QtWidgets.QMainWindow):
 
     def addPath(self):
         pathEditor.add()
+
     def removePath(self):
         pathEditor.remove()
 
@@ -96,8 +97,8 @@ class MyWin(QtWidgets.QMainWindow):
                 IWannaFFmpeg = messagebox.askyesnocancel('Предупреждение',
                     'На вашем компьютере не установлен набор библиотек FFmpeg. '
                     'Это коснется следующих функций программы:\n'
-                    '- Видео не будет скачиваться вместе с аудио, вместо этого '
-                    'скачается два отдельных файла: видеоряд в mp4 и аудиоряд в m4a;'
+                    '- Видео НЕ будет скачиваться вместе с аудио, вместо этого '
+                    'скачается два отдельных файла: видеоряд в mp4 и аудиоряд в m4a;\n'
                     '- Аудио будут скачиваться в формате m4a, а не mp3.\n'
                     'Хотите перейти на сайт установки FFmpeg?\n\n'
                     '"Да" - перейти на ffmpeg.org и отменить скачивание;\n'
