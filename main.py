@@ -49,6 +49,9 @@ class MyWin(QtWidgets.QMainWindow):
         pathEditor.remove()
 
     def applyVideo(self):
+        global url
+        global thumb
+
         preurl = self.ui.ytlinkLine.text()
         self.setProgress(10)
         try:
@@ -59,10 +62,10 @@ class MyWin(QtWidgets.QMainWindow):
             print('| Ошибка! ', e)
             messagebox.showinfo("Ошибка",
                                 'Видео недоступно, '
-                                'или сайт, на который вы сослались, не поддерживается библиотекой yt-dlp.\n')
+                                'или сайт, на который вы сослались, '
+                                'не поддерживается библиотекой yt-dlp.\n')
             return self.setProgress(0)
 
-        global url
         url = preurl
 
         try:
@@ -74,7 +77,6 @@ class MyWin(QtWidgets.QMainWindow):
             self.setProgress(50)
             # Получение ссылки на превью видео
             thumbUrl = info.get('thumbnail')
-            global thumb
             thumb = requests.get(thumbUrl).content
             self.setProgress(75)
             # Установка превью в программу
@@ -86,7 +88,8 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.updateButtons(True)
         except Exception as e:
             print('| Ошибка! ',e)
-            messagebox.showinfo("Ошибка", 'Произошла ошибка обработки видео.\nСообщение об ошибке:\n'+str(e))
+            messagebox.showinfo("Ошибка", 'Произошла ошибка обработки видео.'
+                                          '\nСообщение об ошибке:\n'+str(e))
         self.setProgress(0)
 
     # Сохранение файла
@@ -114,14 +117,17 @@ class MyWin(QtWidgets.QMainWindow):
             buttonName = str(self.sender().objectName())
 
             if not downloadPath:
-                messagebox.showinfo("Кринжанул", "Укажите путь для сохранения файла")
+                messagebox.showinfo("Кринжанул",
+                                    "Укажите путь для сохранения файла")
                 return
             elif not downloadName:
-                messagebox.showinfo("Кринжанул", "Отсутствует название файла")
+                messagebox.showinfo("Кринжанул",
+                                    "Отсутствует название файла")
                 return
             for i in downloadName:
                 if i in forbiddenchar:
-                    messagebox.showinfo("Кринжанул", "В названии присутствуют запрещенные символы")
+                    messagebox.showinfo("Кринжанул",
+                                        "В названии присутствуют запрещенные символы")
                     return
 
             add_opt = {'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'}
@@ -150,8 +156,8 @@ class MyWin(QtWidgets.QMainWindow):
             ydl = yt_dlp.YoutubeDL(opt)
             ydl.download([url])
             print('| СКАЧИВАНИЕ ЗАВЕРШЕНО')
-        except yt_dlp.utils.PostProcessingError as e:
-            print(e)
+        except Exception as e:
+            print('| Ошибка! ',e)
             messagebox.showinfo("Ошибка", 'В процессе сохранение файла произошла ошибка.'
                                           '\nСообщение об ошибке:\n' + str(e))
         self.setProgress(0)
